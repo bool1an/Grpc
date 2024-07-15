@@ -1,22 +1,51 @@
 using Grpc.Core;
-using GrpcGreeter;
 
-namespace GrpcGreeter.Services
+public override async Task<FileUploadResponse> UploadFile(IAsyncStreamReader<FileUploadRequest> requestStream, ServerCallContext context)
 {
-    public class GreeterService : Greeter.GreeterBase
+    GeneralResponse response = new GeneralResponse();
+    Console.WriteLine("File upload request received");
+    if (await requestStream.MoveNext())
     {
-        private readonly ILogger<GreeterService> _logger;
-        public GreeterService(ILogger<GreeterService> logger)
-        {
-            _logger = logger;
-        }
+        FileUploadRequest request = new FileUploadRequest();
+        request = requestStream.Current;
+        GeneralRequest generalRequest = request.Request;
 
-        public override Task<HelloReply> SayHello(HelloRequest request, ServerCallContext context)
+        if (generalRequest != null)
         {
-            return Task.FromResult(new HelloReply
+            File File = new File();
+            File.Day = request.File.Day;
+            File.Session = request.File.Session;
+            File.FileStartTime = request.File.StartTime;
+            File.FileTimeMinutes = request.File.FileTimeMinutes;
+            File.DecryptionKey = request.File.Decryptionkey;
+            File.FileExtention = request.File.FileExtention;
+            File.FileBytes = request.File.FileBytes.ToByteArray();
+            try
             {
-                Message = "Hello " + request.Name
-            });
+                myDbContext.Add(File);
+                myDbContext.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                response.Code = 500;
+                response.Status = "Failed";
+                response.Message = "Database Exception Occured";
+                response.Details = e.Message;
+                return new FileUploadResponse
+                {
+                    Response = response
+                };
+            }
         }
     }
+
+
+    response.Code = 200;
+    response.Status = "Success";
+    response.Message = "File uploaded successfully";
+    Console.WriteLine("Done");
+    return new FileUploadResponse
+    {
+        Response = response
+    };
 }
