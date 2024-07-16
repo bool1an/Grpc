@@ -1,9 +1,10 @@
 ﻿using System.Threading.Tasks;
 using Grpc.Net.Client;
+using GrpcClientApp;
 
 
 using var channel = GrpcChannel.ForAddress("http://localhost:5242");
-var fileService = new FileService.FileServiceClient(channel);
+var filer = new Filer.FilerClient(channel);
 
 byte[] file = File.ReadAllBytes("E:\\malicious_phish.csv");
 
@@ -24,7 +25,7 @@ request.Request.Mac = " asdf";
 request.Request.HddSerial = "Asdfadf";
 request.Request.Timestamp = "ASdf";
 
-var call = fileService.UploadFile();
+var call = filer.UploadFile();
 await call.RequestStream.WriteAsync(request);
 await call.RequestStream.CompleteAsync();
 FileUploadResponse response = await call;

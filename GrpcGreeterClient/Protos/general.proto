@@ -1,5 +1,7 @@
 syntax = "proto3";
 
+option csharp_namespace = "GrpcClientApp";
+
 message GeneralResponse{
     int32 code= 1;
     string status = 2;
@@ -15,7 +17,7 @@ message GeneralRequest{
     string appId =  5;
 }
 
-service FileService {
+service Filer {
     rpc UploadFile(stream FileUploadRequest) returns (FileUploadResponse);
     rpc FindAll(GeneralRequest) returns (stream FileDownloadResponse);
     rpc Delete(DeleteRequest) returns (GeneralResponse);
