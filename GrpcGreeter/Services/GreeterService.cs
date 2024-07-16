@@ -1,4 +1,5 @@
 using Grpc.Core;
+using System.Diagnostics;
 
 namespace GrpcServiceApp.Services
 {
@@ -7,7 +8,9 @@ namespace GrpcServiceApp.Services
         public override async Task<FileUploadResponse> UploadFile(IAsyncStreamReader<FileUploadRequest> requestStream, ServerCallContext context)
         {
             GeneralResponse response = new GeneralResponse();
+            Stopwatch stopwatch = new Stopwatch();
             Console.WriteLine("File upload request received");
+            stopwatch.Start();
             if (await requestStream.MoveNext())
             {
                 FileUploadRequest request = new FileUploadRequest();
@@ -28,12 +31,12 @@ namespace GrpcServiceApp.Services
                     };
                 }
             }
-
+            stopwatch.Stop();
 
             response.Code = 200;
             response.Status = "Success";
             response.Message = "File uploaded successfully";
-            Console.WriteLine("Done");
+            Console.WriteLine("Done: " + stopwatch.ElapsedMilliseconds);
             return new FileUploadResponse
             {
                 Response = response

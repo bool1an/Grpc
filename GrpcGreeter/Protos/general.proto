@@ -7,6 +7,7 @@ message GeneralResponse{
     string status = 2;
     string message = 3;
     string details = 4;
+    int32 time_load = 5;
 }
 
 message GeneralRequest{
