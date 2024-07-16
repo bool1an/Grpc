@@ -4,10 +4,17 @@ using Grpc.Net.Client;
 using GrpcClientApp;
 
 
-using var channel = GrpcChannel.ForAddress("http://localhost:5001");
+using var channel = GrpcChannel.ForAddress("http://localhost:5001", new GrpcChannelOptions
+{
+    MaxReceiveMessageSize = null,
+    MaxSendMessageSize = null,
+    MaxRetryBufferSize = null,
+    MaxRetryBufferPerCallSize = null
+});
 var filer = new Filer.FilerClient(channel);
 
-byte[] file = File.ReadAllBytes("E:\\File1Mb.txt");
+
+byte[] file = File.ReadAllBytes("E:\\File100Mb.txt");
 
 FileUploadRequest request = new FileUploadRequest();
 request.File = new FileModel{
