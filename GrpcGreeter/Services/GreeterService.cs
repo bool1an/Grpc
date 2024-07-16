@@ -24,24 +24,8 @@ namespace GrpcServiceApp.Services
                         FileTimeMinutes = request.File.FileTimeMinutes,
                         Decryptionkey = request.File.Decryptionkey,
                         FileExtention = request.File.FileExtention,
-                        FileBytes = request.File.FileBytes.ToByteArray()
+                        FileBytes = request.File.FileBytes
                     };
-                    try
-                    {
-                        myDbContext.Add(File);
-                        myDbContext.SaveChanges();
-                    }
-                    catch (Exception e)
-                    {
-                        response.Code = 500;
-                        response.Status = "Failed";
-                        response.Message = "Database Exception Occured";
-                        response.Details = e.Message;
-                        return new FileUploadResponse
-                        {
-                            Response = response
-                        };
-                    }
                 }
             }
 
