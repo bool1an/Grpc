@@ -1,7 +1,13 @@
 using Grpc.Core;
 using GrpcGreeter;
 
+<<<<<<< Updated upstream
 namespace GrpcGreeter.Services
+=======
+
+
+public override async Task<FileUploadResponse> UploadFile(IAsyncStreamReader<FileUploadRequest> requestStream, ServerCallContext context)
+>>>>>>> Stashed changes
 {
     public class GreeterService : Greeter.GreeterBase
     {
