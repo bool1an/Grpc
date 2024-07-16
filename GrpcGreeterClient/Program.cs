@@ -3,10 +3,10 @@ using Grpc.Net.Client;
 using GrpcClientApp;
 
 
-using var channel = GrpcChannel.ForAddress("http://localhost:5242");
+using var channel = GrpcChannel.ForAddress("http://localhost:7255");
 var filer = new Filer.FilerClient(channel);
 
-byte[] file = File.ReadAllBytes("E:\\malicious_phish.csv");
+byte[] file = File.ReadAllBytes("E:\\File1Kb.txt");
 
 FileUploadRequest request = new FileUploadRequest();
 request.File = new FileModel();
