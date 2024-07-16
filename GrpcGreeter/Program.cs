@@ -1,4 +1,5 @@
 using GrpcServiceApp.Services;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,8 +16,7 @@ builder.Services.AddGrpc();
 //”становка максимального принимаемого значени€.
 builder.WebHost.ConfigureKestrel(serverOptions =>
 {
-    serverOptions.Limits.MaxResponseBufferSize = 200 * 1024 * 1024;
-    serverOptions.Limits. = 200 * 1024 * 1024;
+    serverOptions.Limits.MaxRequestBodySize = 200 * 1024 * 1024;
 });
 
 var app = builder.Build();
