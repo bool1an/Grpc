@@ -4,45 +4,39 @@ using Grpc.Net.Client;
 using GrpcClientApp;
 
 
+//установка значений конфигурации клиента (на максимальное передаваемое значение)
 using var channel = GrpcChannel.ForAddress("http://localhost:5001", new GrpcChannelOptions
 {
-    MaxReceiveMessageSize = null,
-    MaxSendMessageSize = null,
-    MaxRetryBufferSize = null,
-    MaxRetryBufferPerCallSize = null
+    MaxSendMessageSize = int.MaxValue,
+    MaxReceiveMessageSize = int.MaxValue
 });
+
 var filer = new Filer.FilerClient(channel);
 
-
-byte[] file = File.ReadAllBytes("E:\\File100Mb.txt");
+//Установка пути до передаваемого файла
+byte[] file = File.ReadAllBytes("E:\\File1Mb.txt");
 
 FileUploadRequest request = new FileUploadRequest();
+
+//запись файла в protobuf
 request.File = new FileModel{
-    Day = "Day 1",
-    Session = "Session 1",
     FileBytes = Google.Protobuf.ByteString.CopyFrom(file),
-    FileExtention = "txt",
-    StartTime = "08:30",
-    CombinationId = 1,
-    Decryptionkey = "Eex",
-    FileTimeMinutes = 90
 };
-
-
-request.Request = new GeneralRequest();
-request.Request.Ip = "192.168.88.5";
-request.Request.Mac = " asdf";
-request.Request.HddSerial = "Asdfadf";
-request.Request.Timestamp = "ASdf";
 
 Stopwatch stopwatch = new Stopwatch();
 stopwatch.Start();
+
+//начало передачи файла
 var call = filer.UploadFile();
+//запись байт файла в текущий поток
 await call.RequestStream.WriteAsync(request);
+//закрытие потока
 await call.RequestStream.CompleteAsync();
+//ожидание конца загрузки файла и получение ответа после
 FileUploadResponse response = await call;
+
 stopwatch.Stop();
-Console.WriteLine(response.Response.Message + ' ' + stopwatch.ElapsedMilliseconds);
+Console.WriteLine(response.Message + ' ' + stopwatch.ElapsedMilliseconds);
 Console.WriteLine();
 Console.WriteLine("Press any key to continue");
 Console.ReadKey();
