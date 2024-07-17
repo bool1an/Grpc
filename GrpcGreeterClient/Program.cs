@@ -5,7 +5,7 @@ using GrpcClientApp;
 
 
 //установка значений конфигурации клиента (на максимальное передаваемое значение)
-using var channel = GrpcChannel.ForAddress("http://localhost:5001", new GrpcChannelOptions
+using var channel = GrpcChannel.ForAddress("https://localhost:5002", new GrpcChannelOptions
 {
     MaxSendMessageSize = int.MaxValue
 });

@@ -4,13 +4,6 @@ using Microsoft.AspNetCore.Server.Kestrel.Core;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.WebHost.ConfigureKestrel(options =>
-{
-    //Установка HTTP/2 соединения без TLS.
-    options.ListenLocalhost(5001, o => o.Protocols =
-        HttpProtocols.Http2);
-});
-
 //Установка максимального принимаемого значения.
 builder.Services.AddGrpc(options =>
 {
