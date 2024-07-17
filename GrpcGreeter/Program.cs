@@ -11,12 +11,10 @@ builder.WebHost.ConfigureKestrel(options =>
         HttpProtocols.Http2);
 });
 
-builder.Services.AddGrpc();
-
 //”становка максимального принимаемого значени€.
-builder.WebHost.ConfigureKestrel(serverOptions =>
+builder.Services.AddGrpc(options =>
 {
-    serverOptions.Limits.MaxRequestBodySize = 200 * 1024 * 1024;
+    options.MaxReceiveMessageSize = int.MaxValue; 
 });
 
 var app = builder.Build();

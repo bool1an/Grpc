@@ -7,14 +7,13 @@ using GrpcClientApp;
 //установка значений конфигурации клиента (на максимальное передаваемое значение)
 using var channel = GrpcChannel.ForAddress("http://localhost:5001", new GrpcChannelOptions
 {
-    MaxSendMessageSize = int.MaxValue,
-    MaxReceiveMessageSize = int.MaxValue
+    MaxSendMessageSize = int.MaxValue
 });
 
 var filer = new Filer.FilerClient(channel);
 
 //Установка пути до передаваемого файла
-byte[] file = File.ReadAllBytes("E:\\File1Mb.txt");
+byte[] file = File.ReadAllBytes("E:\\File1Gb.txt");
 
 FileUploadRequest request = new FileUploadRequest();
 
